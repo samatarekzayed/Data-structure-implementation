@@ -1,0 +1,138 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+interface IQueue {
+  /*** Inserts an item at the queue front.*/
+  public void enqueue(Object item);
+  /*** Removes the object at the queue rear and returnsit.*/
+  public Object dequeue();
+  /*** Tests if this queue is empty.*/
+  public boolean isEmpty();
+  /*** Returns the number of elements in the queue*/
+  public int size();
+}
+
+public class ArrayQueue implements IQueue {
+
+    int rear=0;
+    int front=0;
+    int size=0;
+    Object queue[]=new Object[100];
+  /////////////////////////////////////////////////////
+    public void enqueue(Object item)
+    {
+          for(int i=front;i>-1;i--)
+              queue[i+1]=queue[i];
+          queue[0]=item;
+         front++;
+         size++;
+    }
+  /////////////////////////////////////////////////////
+  public Object dequeue()
+    {
+      if(size==0)
+          return null;
+      else{
+      int f=front-1;
+      front--;
+      size--;
+      return queue[f];
+      }
+    }
+  /////////////////////////////////////////////////////
+  public boolean isEmpty()
+    {
+      if(size==0)
+          return true;
+     else
+         return false;  
+    }
+  /////////////////////////////////////////////////////
+  public int size()
+    {
+      return size;
+   }
+ //////////////////////////////////////////////////////
+   public void print()
+   {
+       if(size==0)
+       {
+          System.out.print("[]");
+       }
+       else
+       {
+      System.out.print("[");
+       System.out.print(queue[0]);
+      for(int i=rear+1;i<front;i++)
+      { 
+          System.out.print(", ");
+          System.out.print(queue[i]);
+      }
+         System.out.print("]");
+       }
+   } 
+//////////////////////////////////////////////////
+     
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */      Scanner sc = new Scanner(System.in);
+        String sin = sc.nextLine().replaceAll("\\[|\\]", "");
+        String[] s = sin.split(", ");
+        int[] arr = new int[s.length];
+        if (s.length == 1 && s[0].isEmpty())
+            arr = new int[]{};
+        else {
+            for(int i = 0; i < s.length; ++i)
+               arr[i] = Integer.parseInt(s[i]);
+        }
+        ArrayQueue aq = new ArrayQueue ();
+        
+         int[] arr2= new int[arr.length];
+        int j=0;
+        for(int i=arr.length-1;i>-1;i--)
+        {
+           arr2[j++]=arr[i]; 
+            
+        }
+        
+        if(!s[0].isEmpty())
+        {
+          for(int i = 0; i < s.length;i++){
+                aq.enqueue(arr2[i]);
+          }
+        }
+        String op;
+        op=sc.nextLine();
+        int x;
+        Object element=new Object(); //law m3mltsh new hy2oli enha might not be declared b3d kda leh m3rfsh awi
+        
+        switch(op)
+        {
+           case"enqueue":
+             x= sc.nextInt();
+             aq.enqueue(x);
+             aq.print();
+             break;
+                
+           case"dequeue":
+               if(aq.dequeue()==null)
+               {System.out.print("Error");}
+                else
+                 aq.print();
+             break;
+                
+           case"isEmpty":
+             if(aq.isEmpty())
+                System.out.print("True");
+             else
+                System.out.print("False");    
+             break;
+                
+           case"size":
+              System.out.print(aq.size());
+             break;     
+        }
+    }
+}

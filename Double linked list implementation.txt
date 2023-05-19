@@ -1,0 +1,371 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+
+
+interface ILinkedList {
+/**
+* Inserts a specified element at the specified position in the list.
+* @param index
+* @param element
+*/
+public void add(int index, Object element);
+/**
+* Inserts the specified element at the end of the list.
+* @param element
+*/
+public void add(Object element);
+/**
+* @param index
+* @return the element at the specified position in this list.
+*/
+public Object get(int index);
+
+/**
+* Replaces the element at the specified position in this list with the
+* specified element.
+* @param index
+* @param element
+*/
+public void set(int index, Object element);
+/**
+* Removes all of the elements from this list.
+*/
+public void clear();
+/**
+* @return true if this list contains no elements.
+*/
+public boolean isEmpty();
+/**
+* Removes the element at the specified position in this list.
+* @param index
+*/
+public void remove(int index);
+/**
+* @return the number of elements in this list.
+*/
+public int size();
+/**
+* @param fromIndex
+* @param toIndex
+* @return a view of the portion of this list between the specified fromIndex and toIndex, inclusively.
+*/
+public ILinkedList sublist(int fromIndex, int toIndex);
+/**
+* @param o
+* @return true if this list contains an element with the same value as the specified element.
+*/
+public boolean contains(Object o);
+}
+
+
+ class Object {
+    
+    int value;
+    Object next;
+    Object prev;
+}
+
+
+public class DoubleLinkedList  implements ILinkedList {
+    Object head = new Object();
+    Object tail = new Object();
+    int size  = 0;
+    
+    public void add(int index, Object element) {
+        if(size == 0) {
+            head.next = element;
+            tail.prev = element;
+            element.prev = head;
+            element.next = tail;
+            size++;
+        }else if(index == 0){
+            Object h = head.next;
+            element.next = h;
+            element.prev = head;
+            head.next = element;
+            h.prev = element;
+            size++;
+        }else
+        {
+            Object h = head.next;
+            for(int i = 0;i<index;i++) {
+                h = h.next;
+            }
+            Object w = h.prev;
+            element.next = h;
+            element.prev = w;
+            w.next = element;
+            h.prev = element;
+            size++;
+        }
+    }
+    
+    
+    public void add(Object element) {
+        if(size == 0) {
+            head.next = element;
+            tail.prev = element;
+            element.prev = head;
+            element.next = tail;
+            size++;
+        }
+        else
+        {
+            Object h = tail.prev;
+            element.next = tail;
+            element.prev = h;
+            tail.prev = element;
+            h.next = element;
+            size ++;
+        }
+    }
+    public Object get(int index) {
+        Object h = head.next;
+        if(size == 0 || index >= size) {
+            System.out.println("Error");
+            h = null;
+            return h;
+        }else {
+            
+            for(int i = 0;i<index;i++) {
+            h = h.next;
+            }
+        return h;
+        }
+        
+    }
+    
+    public void set(int index, Object element) {
+        if(index >= size) {
+            System.out.println("Error");
+            return;
+        }else if(index == 0){
+            Object h = head.next;
+            element.next = h.next;
+            element.prev = head;
+            head.next = element;
+            h = h.next;
+            h.prev = element;
+        }else {
+        Object h = head.next;
+        for(int i = 0;i<index;i++) {
+            h = h.next;
+            }
+        element.next = h.next;
+        element.prev = h.prev;
+        h.next.prev = element;
+        h.prev.next = element;
+        }
+    }
+    
+    
+    
+    public void clear() {
+        head.next = tail;
+        tail.next = head;
+        size = 0;
+    }
+    
+    
+    public boolean isEmpty() {
+        if(size == 0) {
+            return true;
+        }
+        return false;
+    }
+    
+    public void remove(int index) {
+        if(index >= size) {
+            System.out.println("Error");
+            return;
+        }else if(index == 0){
+            Object h = head.next;
+            head.next = h.next;
+            h = h.next;
+            h.prev = head;
+        }else {
+            Object h = head.next;
+            for(int i = 0;i<index-1;i++) {
+                h = h.next;
+            }
+        Object w =h.next.next;
+        w.prev = h;
+        h.next = w;
+        
+        }
+        size--;
+    }
+    
+    public int size() {
+        return size;
+    }
+    
+    @Override
+    public ILinkedList sublist(int fromIndex, int toIndex) {
+        // TODO Auto-generated method stub
+        ILinkedList s = new DoubleLinkedList ();
+        int r = toIndex-fromIndex + 1;
+        int[] w = new int[r];
+        int count = 0;
+        Object h = head.next;
+        for(int i = 0;i<fromIndex;i++) {
+            h = h.next;
+        }
+        for(int i = 0;i<r;i++) {            
+            w[count ++] = h.value;
+            h = h.next;
+        }
+        count = 0;
+        for(int i = 0;i<r;i++){
+            Object e = new Object();
+            e.value = w[count++];
+            s.add(e);
+        }
+        return s;
+    }
+    
+    
+    public boolean contains(Object o) {
+        Object h = head.next;
+        for(int i = 0;i<size;i++) {
+            if(h.value == o.value) {
+                return true;
+            }
+            h = h.next;
+        }
+        
+        return false;
+    }
+    public static void main(String[] args) {
+        
+    
+        Scanner sc = new Scanner(System.in);
+        String sin = sc.nextLine().replaceAll("\\[|\\]", "");
+        String[] s = sin.split(", ");;
+        int[] arr = new int[s.length];
+        if (s.length == 1 && s[0].isEmpty())
+            arr = new int[]{};
+        else {
+            for(int i = 0; i < s.length; ++i)
+               arr[i] = Integer.parseInt(s[i]);
+        }
+        DoubleLinkedList ls = new DoubleLinkedList ();
+        
+        
+        if(!s[0].isEmpty()){
+            //System.out.println("Error");
+          for(int i = 0; i < s.length; ++i){
+                Object h = new Object();
+                h.value = arr[i];
+                ls.add(h);
+          }
+        }
+        String m = sc.nextLine();
+        int x, index;
+        Object h = new Object();
+        switch(m){
+            case "add":
+                x = sc.nextInt();
+                h.value = x;
+                ls.add(h);
+                ls.print();
+                break;
+           case "addToIndex":
+                index = sc.nextInt();
+                x = sc.nextInt();
+                h.value = x;
+                if(index > ls.size || index < 0){
+                    System.out.println("Error");
+                }else{
+                    ls.add(index, h);
+                    ls.print();
+                }
+                break;
+            case "isEmpty":
+                if(!ls.isEmpty()){
+                    System.out.println("False");
+                }else{
+                    System.out.println("True");
+                }
+                break;
+            case "set":
+                index = sc.nextInt();
+                x = sc.nextInt();
+                h.value = x;
+                if(index >= ls.size || index < 0){
+                    System.out.println("Error");
+                }else{
+                    ls.set(index, h);
+                    ls.print();
+                }
+                break;
+            case "get":
+                index = sc.nextInt();
+                if(index >= ls.size || index < 0){
+                    System.out.println("Error");
+                }else{
+                    h = ls.get(index);
+                    System.out.println(h.value);
+                }
+                break;
+            case "size":
+                System.out.println(ls.size);
+                break;
+            case "contains":
+                x = sc.nextInt();
+                h.value = x;
+                if(!ls.contains(h)){
+                    System.out.println("False");
+                }else{
+                    System.out.println("True");
+                }
+                break;
+            case "sublist":
+                index = sc.nextInt();
+                x = sc.nextInt();
+                if(index >= ls.size || x >= ls.size || index < 0 || x < 0 || x < index) {
+                    System.out.println("Error");
+                }else{
+                    DoubleLinkedList p =  (DoubleLinkedList)ls.sublist(index, x);
+                    p.print();
+                }
+                break;
+            case "clear":
+                ls.clear();
+                ls.print();
+                break;
+            case "remove":
+                index = sc.nextInt();
+                if(index >= ls.size || index < 0){
+                    System.out.println("Error");
+                }else{
+                ls.remove(index);
+                    ls.print();
+                }
+                break;
+            default:
+                System.out.println("Error");
+        }
+        
+        
+        
+    }
+    public void print() {
+        if(size == 0){
+            System.out.println("[]");
+            return;
+        }
+        Object h = head.next;
+        System.out.print("[" + h.value);
+        h = h.next;
+        for(int i = 1;i < size;i++) {
+            System.out.print(", " + h.value);
+            h = h.next;
+        }
+        System.out.print("]");
+    }
+}

@@ -1,0 +1,198 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+interface IStack {
+  
+  /*** Removes the element at the top of stack and returnsthat element.
+  * @return top of stack element, or through exception if empty
+  */
+  
+  public Object pop();
+  
+  /*** Get the element at the top of stack without removing it from stack.
+  * @return top of stack element, or through exception if empty
+  */
+  
+  public Object peek();
+  
+  /*** Pushes an item onto the top of this stack.
+  * @param object to insert*
+  */
+  
+  public void push(Object element);
+  
+  /*** Tests if this stack is empty
+  * @return true if stack empty
+  */
+  public boolean isEmpty();
+  
+  public int size();
+}
+
+class Object {
+    
+    int val;
+    Object next;
+}
+
+public class MyStack implements IStack {
+     int size=0;
+     Object head=null;
+    Object tail=null;
+    
+/////////////////////////////////////////////////////////
+    public boolean isEmpty()
+    {
+       if(size == 0) {
+            return true;
+        }
+        return false;
+    }
+    
+ ///////////////////////////////////////////////////////////
+    public int size()
+    {
+        return size;
+    }
+  
+/////////////////////////////////////////////////////////////
+    public void print()
+     {
+       if(size == 0){
+            System.out.print("[]");
+            return;
+        }
+
+      else
+      {
+        Object h = head;
+        System.out.print("[");
+        System.out.print(head.val); 
+        for(int i=0;i<size-1;i++){
+            h = h.next;
+            System.out.print(", " + h.val);
+        } 
+          System.out.println("]");
+      }
+     }
+    ///////////////////////////////////////////////////////////////
+     public Object pop()
+     { 
+         if(size==0)
+         {
+            return null;
+         }
+         else
+         {
+         Object h =head;
+        head=head.next;
+         size--;
+          return h;
+         }
+     }
+   ///////////////////////////////////////////////////////////////
+     public Object peek()
+     {
+        if(size==0)
+         {
+             return null;
+         }
+         else
+         {
+        return head;
+         }
+     }
+   //////////////////////////////////////////////////////////////////
+     public void push(Object element)
+     {
+        element.next=head; 
+         head=element;
+        size ++; 
+     }
+  /////////////////////////////////////////////////////////////////
+         
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */       Scanner sc=new Scanner(System.in);
+         String sin= sc.nextLine().replaceAll("\\[|\\]", "");
+         String[] s = sin.split(", ");;
+         int[] arr= new int[s.length];
+         if (s.length == 1 && s[0].isEmpty()) //length =1 la2n split trga3 el empty dah 3la asas eno awl element 
+            arr = new int[]{};  // fadia y3ni
+        else {
+            for(int i = 0; i < s.length; ++i)
+               arr[i] = Integer.parseInt(s[i]);
+        }
+        MyStack stk = new MyStack ();
+        
+        int[] arr2= new int[arr.length];
+        int j=0;
+        for(int i=arr.length-1;i>-1;i--)
+        {
+           arr2[j++]=arr[i]; 
+            
+        }
+        
+        if(!s[0].isEmpty()){
+            //System.out.println("Error");
+          for(int i = 0; i < s.length; ++i){
+                Object h= new Object();//ana msh 3arfa eshm3na 3amlna kda hena f el oop n3rf
+                h.val = arr2[i];
+                stk.push(h);
+          }
+        }
+    
+    
+        String op = sc.nextLine();
+        Object sm=new Object();
+        int x;
+         switch(op){
+          case "push":
+               x=sc.nextInt();
+                 sm.val=x;
+               stk.push(sm);
+               stk.print();
+                break;
+           case "pop":
+               if( stk.pop()==null)
+                   System.out.print("Error");
+               else 
+               {
+                stk.print();
+               }
+                break;
+                 
+            case "peek":
+                if(stk.peek()==null)
+                     System.out.print("Error");
+                else
+                {
+                sm=stk.peek();
+                System.out.print(sm.val);
+                }
+                break;
+                 
+            
+            case "size":
+                System.out.println(stk.size);
+                break;
+            
+            case "isEmpty":
+                if(stk.isEmpty()){
+                    System.out.println("True");
+                }else{
+                    System.out.println("False");
+                }
+                break;
+                 
+                 
+            default:
+                System.out.println("Error");
+        }
+        
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. */
+    }
+    
+}

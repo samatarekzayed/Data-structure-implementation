@@ -1,0 +1,159 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+interface IQueue {
+  /*** Inserts an item at the queue front.*/
+  public void enqueue(Object item);
+  /*** Removes the object at the queue rear and returnsit.*/
+  public Object dequeue();
+  /*** Tests if this queue is empty.*/
+  public boolean isEmpty();
+  /*** Returns the number of elements in the queue*/
+  public int size();
+}
+class Object{
+    int val;
+    Object next;
+}
+public class LinkedListQueue implements IQueue {
+    Object head=null;
+    Object tail=null;
+    int size;
+  /////////////////////////////////////////////////////
+    public void enqueue(Object item)
+    {
+          item.next=head;
+          head=item;
+          size++;
+    }
+  /////////////////////////////////////////////////////
+  public Object dequeue()
+    {
+      if(size==0)
+      { 
+          return null;
+      }
+      else if (size==1)
+      {
+          Object d=head;
+          head=null;
+          tail=null;
+          size--;
+          return d;
+      }
+      else
+      {
+      Object h=head;
+      Object d;
+      for(int i=0;i<size-2;i++)
+         h=h.next;
+      d=h.next;
+      h.next=null;
+      tail=h;
+      size--;
+      return d;
+      }
+    }
+  /////////////////////////////////////////////////////
+  public boolean isEmpty()
+    {
+      if(size==0)
+          return true;
+     else
+         return false;  
+    }
+  /////////////////////////////////////////////////////
+  public int size()
+    {
+      return size;
+   }
+ //////////////////////////////////////////////////////
+   public void print()
+   {
+       if(size==0)
+       {
+          System.out.print("[]");
+       }
+       else
+       {
+       Object h=head;
+      System.out.print("[");
+       System.out.print(h.val);
+      for(int i=0;i<size-1;i++)
+      { 
+          h=h.next;
+          System.out.print(", ");
+          System.out.print(h.val);
+      }
+         System.out.print("]");
+       }
+   } 
+//////////////////////////////////////////////////
+     
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */      Scanner sc = new Scanner(System.in);
+        String sin = sc.nextLine().replaceAll("\\[|\\]", "");
+        String[] s = sin.split(", ");
+        int[] arr = new int[s.length];
+        if (s.length == 1 && s[0].isEmpty())
+            arr = new int[]{};
+        else {
+            for(int i = 0; i < s.length; ++i)
+               arr[i] = Integer.parseInt(s[i]);
+        }
+        LinkedListQueue lq = new LinkedListQueue ();
+        
+         int[] arr2= new int[arr.length];
+        int j=0;
+        for(int i=arr.length-1;i>-1;i--)
+        {
+           arr2[j++]=arr[i]; 
+            
+        }
+        
+        if(!s[0].isEmpty())
+        {
+          for(int i = 0; i < s.length;i++){
+                Object h = new Object();
+                h.val = arr2[i];
+                lq.enqueue(h);
+          }
+        }
+        String op;
+        op=sc.nextLine();
+        int x;
+        Object element=new Object(); //law m3mltsh new hy2oli enha might not be declared b3d kda leh m3rfsh awi
+        
+        switch(op)
+        {
+           case"enqueue":
+             x= sc.nextInt();
+             element.val=x;
+             lq.enqueue(element);
+             lq.print();
+             break;
+                
+           case"dequeue":
+              
+                if(lq.dequeue()==null)
+                  System.out.print("Error");
+                else
+                 lq.print();
+             break;
+                
+           case"isEmpty":
+             if(lq.isEmpty())
+                System.out.print("True");
+             else
+                System.out.print("False");    
+             break;
+                
+           case"size":
+              System.out.print(lq.size());
+             break;     
+        }
+    }
+}

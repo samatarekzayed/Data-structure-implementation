@@ -1,0 +1,609 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+
+interface IPolynomialSolver {
+    /**
+    * Set polynomial terms (coefficients & exponents)
+    * @param poly: name of the polynomial
+    * @param terms: array of [coefficients][exponents]
+    */
+    void setPolynomial(char poly, int[][] terms);
+  
+    /**
+    * Print the polynomial in ordered human readable representation
+    * @param poly: name of the polynomial
+    * @return: polynomial in the form like 27x^2+x-1
+    */
+    String print(char poly);
+  
+    /**
+    * Clear the polynomial
+    * @param poly: name of the polynomial
+    */
+      void clearPolynomial(char poly);
+  
+    /**
+    * Evaluate the polynomial
+    * @param poly: name of the polynomial
+    * @param value: the polynomial constant value
+    * @return the value of the polynomial
+    */
+    float evaluatePolynomial(char poly, float value);
+  
+    /**
+    * Add two polynomials
+    * @param poly1: first polynomial
+    * @param poly2: second polynomial
+    * @return the result polynomial
+    */
+    int[][] add(char poly1, char poly2);
+  
+    /**
+    * Subtract two polynomials
+    * @param poly1: first polynomial
+    * @param poly2: second polynomial
+    * @return the result polynomial*/
+    int[][] subtract(char poly1, char poly2);
+  
+    /**
+    * Multiply two polynomials
+    * @param poly1: first polynomial
+    * @param poly2: second polynomial
+    * @return: the result polynomial
+    */
+    int[][] multiply(char poly1, char poly2);
+}
+
+class Object {
+    
+    int value;
+    Object next;
+}
+
+public class PolynomialSolver implements IPolynomialSolver{
+    /**
+    * Set polynomial terms (coefficients & exponents)
+    * @param poly: name of the polynomial
+    * @param terms: array of [coefficients][exponents]
+    */
+    static PolynomialSolver a = new PolynomialSolver();
+    static PolynomialSolver b = new PolynomialSolver();
+    static PolynomialSolver c = new PolynomialSolver();
+    static PolynomialSolver r = new PolynomialSolver();
+    static PolynomialSolver aexp = new PolynomialSolver();
+    static PolynomialSolver bexp = new PolynomialSolver();
+    static PolynomialSolver cexp = new PolynomialSolver();
+    static PolynomialSolver rexp = new PolynomialSolver();
+    Object head = null;
+    Object tail = null;
+    int size  = 0;
+    /* Implement your linked list class here*/
+
+    public void add(int index, Object element) {
+        // TODO Auto-generated method stub
+        if(size == 0) {
+            head = element;
+            tail = element;
+            size++;
+        }else if(index == 0){
+            element.next = head;
+            head = element;
+            size++;
+        }else
+        {
+            Object h = head;
+            for(int i = 0;i<index-1;i++) {
+                h = h.next;
+            }
+            element.next = h.next;
+            h.next = element;
+            size++;
+        }
+    }
+
+    
+    public void add(Object element) {
+        // TODO Auto-generated method stub
+        if(size == 0) {
+            head = element;
+            tail = element;
+            size++;
+        }
+        else
+        {
+            tail.next = element;
+            tail = element;
+            size ++;
+        }
+    }
+
+
+    public Object get(int index) {
+        // TODO Auto-generated method stub
+        Object h = head;
+            
+            for(int i = 0;i<index;i++) {
+            h = h.next;
+            }
+        return h;
+        
+    }
+
+    
+    public void set(int index, Object element) {
+        // TODO Auto-generated method stub
+        if(index == 0){
+            element.next = head.next;
+            head = element;
+        }else {
+        Object h = head;
+        for(int i = 0;i<index-1;i++) {
+            h = h.next;
+            }
+        element.next = h.next.next;
+        h.next = element;
+        }
+    }
+
+    
+    public void clear() {
+        // TODO Auto-generated method stub
+        head = null;
+        tail = null;
+        size = 0;
+    }
+
+    
+    public boolean isEmpty() {
+        // TODO Auto-generated method stub
+        if(size == 0) {
+            return true;
+        }
+        return false;
+    }
+    public void prints(){
+        if(size == 0){
+            System.out.print("[]");
+            return;
+        }
+        Object h = head;
+        System.out.print("[" + head.value);
+        for(int i = 0;i<size-1;i++){
+            h = h.next;
+            System.out.print(", " + h.value);
+        }
+        System.out.println("]");
+    }
+
+    
+    public void remove(int index) {
+        // TODO Auto-generated method stub
+        if(index == 0){
+            head = head.next;
+        }else {
+            Object h = head;
+            for(int i = 0;i<index-1;i++) {
+                h = h.next;
+            }
+        h.next = h.next.next;
+        }
+        size--;
+    }
+
+    
+    public int size() {
+        // TODO Auto-generated method stub
+        return size;
+    }
+    public void setPolynomial(char poly, int[][] terms){
+        PolynomialSolver set = new PolynomialSolver();
+        if(poly == 'A'){
+            set = a;
+        }else if(poly == 'B'){
+            set = b;
+        }else if(poly == 'C'){
+            set = c;
+        }
+        
+    }
+  
+    /**
+    * Print the polynomial in ordered human readable representation
+    * @param poly: name of the polynomial
+    * @return: polynomial in the form like 27x^2+x-1
+    */
+    public String print(char poly){
+        PolynomialSolver set = new PolynomialSolver();
+        PolynomialSolver setexp = new PolynomialSolver();
+        if(poly == 'A'){
+            set = a;
+            setexp = aexp;
+        }else if(poly == 'B'){
+            set = b;
+            setexp = bexp;
+        }else if(poly == 'C'){
+            set = c;
+            setexp = cexp;
+        }else if(poly == 'R'){
+            set = r;
+            setexp = rexp;
+        }
+        if(set.size == 0){
+            return null;
+        }
+        int check = 0;
+        Object h = set.head;
+        Object w = setexp.head;
+        if(h.value != 0 && h.value != 1){
+            System.out.print(h.value);
+            check = 1;
+        }
+        if(w.value != 0 && w.value != 1 && h.value != 0){
+            System.out.print("x^" + w.value);
+            check = 1;
+        }else if(w.value == 1 && h.value != 0){
+            System.out.print("x");
+            check = 1;
+        }
+        for(int i = 1;i<set.size;i++){
+            h = h.next;
+            w = w.next;
+            if(h.value == 0){
+                continue;
+            }else if(h.value > 0 && h.value != 1 && check == 1){
+                System.out.print("+" + h.value);
+            }else if(h.value != 1){
+                System.out.print(h.value);
+            }else if(h.value == 1 && check == 1){
+                System.out.print("+");
+            }
+            if(w.value != 0 && w.value != 1){
+                System.out.print("x^" + w.value);
+            }else if(w.value == 1){
+                System.out.print("x");
+            }
+            check = 1;
+        }
+        System.out.print("\n");
+        return null;
+    }
+  
+    /**
+    * Clear the polynomial
+    * @param poly: name of the polynomial
+    */
+      public void clearPolynomial(char poly){
+          if(poly == 'A'){
+              a.head = null;
+              a.tail = null;
+              a.size = 0;
+          }else if(poly == 'B'){
+              b.head = null;
+              b.tail = null;
+              b.size = 0;
+          }else if(poly == 'C'){
+              c.head = null;
+              c.tail = null;
+              c.size = 0;
+          }
+      }
+  
+    /**
+    * Evaluate the polynomial
+    * @param poly: name of the polynomial
+    * @param value: the polynomial constant value
+    * @return the value of the polynomial
+    */
+    public float evaluatePolynomial(char poly, float value){
+        PolynomialSolver set = new PolynomialSolver();
+        if(poly == 'A'){
+            set = a;
+        }else if(poly == 'B'){
+            set = b;
+        }else if(poly == 'C'){
+            set = c;
+        }
+        float sum = 0;
+        Object h = set.head;
+        int count = set.size-1;
+        for(int i = 0;i<set.size;i++){
+            sum += h.value * Math.pow(value, count--);
+            h = h.next;
+        }
+        return sum;
+    }
+  
+    /**
+    * Add two polynomials
+    * @param poly1: first polynomial
+    * @param poly2: second polynomial
+    * @return the result polynomial
+    */
+    public int[][] add(char poly1, char poly2){
+        PolynomialSolver add1 = new PolynomialSolver();
+        PolynomialSolver add2 = new PolynomialSolver();
+        if(poly1 == 'A'){
+            add1 = a;
+        }else if(poly1 == 'B'){
+            add1 = b;
+        }else if(poly1 == 'C'){
+            add1 = c;
+        }
+        if(poly2 == 'A'){
+            add2 = a;
+        }else if(poly2 == 'B'){
+            add2 = b;
+        }else if(poly2 == 'C'){
+            add2 = c;
+        }
+        Object h = add1.head;
+        Object w = add2.head;
+        for(int i = 0;i<add1.size();i++){
+            Object e = new Object();
+            e.value = h.value + w.value;
+            r.add(e);            
+            h = h.next;
+            w = w.next;
+        }
+        int count = r.size-1;
+        while(count >= 0){
+            Object q = new Object();
+            q.value = count--;
+            rexp.add(q);
+        }
+        r.print('R');
+        
+        return null;
+    }
+  
+    /**
+    * Subtract two polynomials
+    * @param poly1: first polynomial
+    * @param poly2: second polynomial
+    * @return the result polynomial*/
+    public int[][] subtract(char poly1, char poly2){
+        PolynomialSolver sub1 = new PolynomialSolver();
+        PolynomialSolver sub2 = new PolynomialSolver();
+        if(poly1 == 'A'){
+            sub1 = a;
+        }else if(poly1 == 'B'){
+            sub1 = b;
+        }else if(poly1 == 'C'){
+            sub1 = c;
+        }
+        if(poly2 == 'A'){
+            sub2 = a;
+        }else if(poly2 == 'B'){
+            sub2 = b;
+        }else if(poly2 == 'C'){
+            sub2 = c;
+        }
+        Object h = sub1.head;
+        Object w = sub2.head;
+        for(int i = 0;i<sub1.size();i++){
+            Object e = new Object();
+            e.value = h.value - w.value;
+            r.add(e);            
+            h = h.next;
+            w = w.next;
+        }
+        int count = r.size-1;
+        while(count >= 0){
+            Object q = new Object();
+            q.value = count--;
+            rexp.add(q);
+        }
+        r.print('R');
+        
+        return null;
+    }
+  
+    /**
+    * Multiply two polynomials
+    * @param poly1: first polynomial
+    * @param poly2: second polynomial
+    * @return: the result polynomial
+    */
+    public int[][] multiply(char poly1, char poly2){
+        PolynomialSolver mult1 = new PolynomialSolver();
+        PolynomialSolver mult2 = new PolynomialSolver();
+        if(poly1 == 'A'){
+            mult1 = a;
+        }else if(poly1 == 'B'){
+            mult1 = b;
+        }else if(poly1 == 'C'){
+            mult1 = c;
+        }
+        if(poly2 == 'A'){
+            mult2 = a;
+        }else if(poly2 == 'B'){
+            mult2 = b;
+        }else if(poly2 == 'C'){
+            mult2 = c;
+        }
+        Object h = mult1.head;
+        Object w = mult2.head;
+        int[] m = new int[2 * mult1.size - 1];        
+        for(int i = 0;i<mult1.size;i++){
+            for(int j = 0;j<mult1.size;j++){
+                m[(i + j)] += h.value * w.value;
+                w = w.next;
+            }
+            h = h.next;
+            w = mult2.head;
+        }
+        for(int i = 0;i < 2 * mult1.size - 1;i++){
+            Object e = new Object();
+            e.value = m[i];
+            r.add(e);
+        }
+        int count = r.size-1;
+        while(count >= 0){
+            Object q = new Object();
+            q.value = count--;
+            rexp.add(q);
+        }
+        r.print('R');
+        return null;
+    }
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        Scanner sc = new Scanner(System.in);
+        PolynomialSolver ps = new PolynomialSolver();
+        int ca = 0, cb = 0, cc = 0;
+        String A = new String();
+        String B = new String();
+        String C = new String();
+        String m = new String();
+        char x;
+        float y;
+        String set = new String();
+        int check = 1;
+        while (check == 1 && check != 2){
+            check = 0;
+            m = sc.nextLine();            
+            set = sc.nextLine();            
+            if(m.equals("set")){
+                check = 1;
+                if(set.equals("A")){
+                    A = sc.nextLine().replaceAll("\\[|\\]", "");
+                    ca = 1;
+                    String[] s = A.split(",");
+                    if (s.length == 1 && s[0].isEmpty()){
+                        System.out.println("Error");
+                        System.exit(0);
+                    }else {
+                        for(int i = 0; i < s.length; ++i){                            
+                            Object h = new Object();
+                            h.value = Integer.parseInt(s[i]);
+                            a.add(h);
+                        }
+                   }
+                    int count = s.length-1;
+                    while(count >= 0){                            
+                            Object h = new Object();
+                            h.value = count--;
+                            aexp.add(h);
+                    }
+                }else if(set.equals("B")){
+                    B = sc.nextLine().replaceAll("\\[|\\]", "");
+                    cb = 1;
+                    String[] s = B.split(",");
+                    if (s.length == 1 && s[0].isEmpty()){
+                        System.out.println("Error");
+                        System.exit(0);
+                    }else {
+                        for(int i = 0; i < s.length; ++i){                            
+                            Object h = new Object();
+                            h.value = Integer.parseInt(s[i]);
+                            b.add(h);
+                        }
+                   }
+                    int count = s.length-1;
+                    while(count >= 0){                            
+                            Object h = new Object();
+                            h.value = count--;
+                            bexp.add(h);
+                    }
+                }else if(set.equals("C")){
+                    C = sc.nextLine().replaceAll("\\[|\\]", "");
+                    cc = 1;
+                    String[] s = C.split(",");
+                    if (s.length == 1 && s[0].isEmpty()){
+                        System.out.println("Error");
+                        System.exit(0);
+                    }else {
+                        for(int i = 0; i < s.length; ++i){                            
+                            Object h = new Object();
+                            h.value = Integer.parseInt(s[i]);
+                            c.add(h);
+                        }
+                   }
+                    int count = s.length-1;
+                    while(count >= 0){                            
+                            Object h = new Object();
+                            h.value = count--;
+                            cexp.add(h);
+                    }
+                }else{
+                    System.out.println("Error");
+                    System.exit(0);
+                }
+            }else if(m.equals("print")){
+                check = 1;
+                if(set.equals("A")){
+                    ps.print('A');
+                }else if(set.equals("B")){
+                    ps.print('B');
+                }else if(set.equals("C")){
+                    ps.print('C');
+                    check = 2;
+                }else{
+                    System.out.println("Error");
+                    System.exit(0);
+                }
+            }else if(m.equals("add")){                
+                x = sc.next().charAt(0);
+                if(!(x == 'A' || x == 'B' || x == 'C')){
+                    System.out.println("Error");
+                    System.exit(0);
+                }
+                if(!(set.charAt(0) == 'A' || set.charAt(0) == 'B' || set.charAt(0) == 'C')){
+                    System.out.println("Error");
+                    System.exit(0);
+                }
+                ps.add(set.charAt(0), x);
+            }else if(m.equals("sub")){
+                x = sc.next().charAt(0);
+                if(!(x == 'A' || x == 'B' || x == 'C')){
+                    System.out.println("Error");
+                    System.exit(0);
+                }
+                if(!(set.charAt(0) == 'A' || set.charAt(0) == 'B' || set.charAt(0) == 'C')){
+                    System.out.println("Error");
+                    System.exit(0);
+                }
+                ps.subtract(set.charAt(0), x);
+            }else if(m.equals("mult")){
+                x = sc.next().charAt(0);
+                if(!(x == 'A' || x == 'B' || x == 'C')){
+                    System.out.println("Error");
+                    System.exit(0);
+                }
+                if(!(set.charAt(0) == 'A' || set.charAt(0) == 'B' || set.charAt(0) == 'C')){
+                    System.out.println("Error");
+                    System.exit(0);
+                }
+                ps.multiply(set.charAt(0), x);
+            }else if(m.equals("eval")){                
+                y = sc.nextFloat();
+                if(!(set.charAt(0) == 'A' || set.charAt(0) == 'B' || set.charAt(0) == 'C')){
+                    System.out.println("Error");
+                    System.exit(0);
+                }
+                System.out.println((int)ps.evaluatePolynomial(set.charAt(0), y));
+            }else if(m.equals("clear")){
+                if(set.equals("A")){
+                    ps.clearPolynomial('A');
+                    a.prints();
+                }else if(set.equals("B")){
+                    ps.clearPolynomial('B');
+                    b.prints();
+                }else if(set.equals("C")){
+                    ps.clearPolynomial('C');
+                    c.prints();
+                }else{
+                    System.out.println("Error");
+                    System.exit(0);
+                }
+            }else{
+                System.out.println("Error");
+                System.exit(0);
+            }
+        }
+    }
+}
